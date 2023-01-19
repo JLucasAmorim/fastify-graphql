@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  ###############################################################
+  # Backend
+  ###############################################################
+  pcontrol-back:
+    container_name: pcontrol-back
+    image: node:lts
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    command: bash -c "npm install -g pnpm && pnpm install && pnpm dev"
+    ports:
+      - 4000:4000
+    depends_on:
+      - pcontrol-master
+    env_file:
+      - .env
+    networks:
+      testing_net:
+  ###############################################################
+  # Master Database
+  ###############################################################
+  pcontrol-master:
+    container_name: pcontrol-master
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: pcontrol-master
+      POSTGRES_USER: pcontrol-master
+      POSTGRES_DB: pcontrol-master
+    ports:
+      - 5432:5432
+    networks:
+      testing_net:
+    restart: unless-stopped
+  ###############################################################
+  # Secondary Database
+  ###############################################################
+  tenant1:
+    container_name: tenant1
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: tenant1
+      POSTGRES_USER: tenant1
+      POSTGRES_DB: tenant1
+    ports:
+      - 5433:5432
+    networks:
+      testing_net:
+    restart: unless-stopped
+  ###############################################################
+  # Redis
+  ###############################################################
+  pcontrol-redis:
+    container_name: pcontrol-redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    networks:
+      testing_net:
+    restart: unless-stopped
+
+networks:
+  testing_net:
+    driver: bridge
+    name: testing_net
