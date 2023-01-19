@@ -17,7 +17,7 @@ services:
     env_file:
       - .env
     networks:
-      testing_net:
+      pcontrol_net:
   ###############################################################
   # Master Database
   ###############################################################
@@ -31,7 +31,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      testing_net:
+      pcontrol_net:
     restart: unless-stopped
   ###############################################################
   # Secondary Database
@@ -46,7 +46,7 @@ services:
     ports:
       - 5433:5432
     networks:
-      testing_net:
+      pcontrol_net:
     restart: unless-stopped
   ###############################################################
   # Redis
@@ -57,10 +57,10 @@ services:
     ports:
       - 6379:6379
     networks:
-      testing_net:
+      pcontrol_net:
     restart: unless-stopped
 
 networks:
-  testing_net:
+  pcontrol_net:
     driver: bridge
-    name: testing_net
+    name: pcontrol_net
