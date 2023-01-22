@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "build",
+    "skipLibCheck": true,
     "rootDir": "src",
     "lib": [
       "esnext"
@@ -10,5 +11,8 @@
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
