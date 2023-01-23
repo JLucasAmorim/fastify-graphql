@@ -1,3 +1,4 @@
+import { Post } from '@prisma/client'
 import { inputObjectType, objectType } from 'nexus'
 
 const User = objectType({
@@ -8,12 +9,13 @@ const User = objectType({
     t.nonNull.string('email')
     t.nonNull.list.nonNull.field('posts', {
       type: 'Post',
-      resolve: (parent, _, context) => {
-        return context.prisma.user
+      resolve: async (parent, _, context) => {
+        const userPosts: Post[] | null = await context.prisma.user
           .findUnique({
             where: { id: parent.id || undefined },
           })
           .posts()
+        return userPosts || []
       },
     })
   },

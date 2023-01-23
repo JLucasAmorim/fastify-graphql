@@ -1,14 +1,17 @@
 {
   "name": "graphql",
   "scripts": {
-    "build": "npm run build:reflection && tsc",
-    "build:reflection": "NEXUS_SHOULD_EXIT_AFTER_REFLECTION=true ts-node src/server",
-    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",
-    "dev:start": "concurrently \"npm run dev\" \"npm run dev:typecheck\"",
-    "dev:migrate": "prisma migrate --experimental -c && prisma migrate up --experimental -c",
-    "dev:typecheck": "tsc --watch --noEmit",
-    "format": "npx prettier --write './**/*.{ts,md}'",
-    "start": "NODE_ENV=production node .nexus/build"
+    "start": "node build/server",
+    "dev": "ts-node-dev --no-notify --exit-child --respawn --transpile-only src/server",
+    "clean": "rm -rf build",
+    "build": "npm -s run clean && npm -s run generate && tsc",
+    "generate": "npm -s run generate:prisma && npm -s run generate:nexus",
+    "generate:prisma": "prisma generate",
+    "generate:nexus": "ts-node --transpile-only src/schema",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:reset": "prisma migrate reset",
+    "format": "npx prettier --write './**/*.{ts,md}'"
   },
   "prettier": {
     "semi": false,

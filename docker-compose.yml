@@ -9,7 +9,7 @@ services:
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
-    command: bash -c "npm install -g pnpm && pnpm install && pnpm dev:start"
+    command: bash -c "npm install -g pnpm && pnpm install && pnpm dev"
     ports:
       - 4000:4000
     depends_on:
